@@ -41,6 +41,12 @@ public class SecurityConfiguration {
                             .successHandler(new AuthenticationSuccessHandler())
                             .permitAll();
                 })
+                .logout(logout -> logout //fix for not redirecting after login
+                        .logoutSuccessUrl("/login?logout") // Weiterleiten nach dem Logout
+                        .invalidateHttpSession(true) // Session invalidieren
+                        .deleteCookies("JSESSIONID", "remember-me") // Cookies löschen
+                        .permitAll()
+                )
                 .build();
     }
 
