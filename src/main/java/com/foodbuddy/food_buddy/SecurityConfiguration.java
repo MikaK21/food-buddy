@@ -1,7 +1,11 @@
 package com.foodbuddy.food_buddy;
 
+import com.foodbuddy.food_buddy.model.MyUserDetailService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractAuthenticationFilterConfigurer;
@@ -17,6 +21,9 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfiguration {
 
+    @Autowired
+    private MyUserDetailService userDetailService; // dependency injection
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
@@ -31,21 +38,33 @@ public class SecurityConfiguration {
     }
 
 
+//    @Bean
+//    public UserDetailsService userDetailsService() {
+//        UserDetails normalUser = User.builder()
+//            .username("client")
+//            .password("$2a$12$c5xp2b3IC1vYx9IwrP3r5.TRBBvTWjriJ5RWiiNWq5QkMmhY776Yu")
+//            .roles("USER")
+//            .build();
+//        UserDetails adminUser = User.builder()
+//                .username("admin")
+//                .password("$2a$12$Ewq7TgaMPbEcduxhxo8VMuS.ptkk7MSNn5m7H75SkpGaPRdoNZ..G")
+//                .roles("ADMIN", "USER")
+//                .build();
+//        return new InMemoryUserDetailsManager(normalUser, adminUser);
+//    }
+
     @Bean
     public UserDetailsService userDetailsService() {
-        UserDetails normalUser = User.builder()
-            .username("client")
-            .password("$2a$12$c5xp2b3IC1vYx9IwrP3r5.TRBBvTWjriJ5RWiiNWq5QkMmhY776Yu")
-            .roles("USER")
-            .build();
-        UserDetails adminUser = User.builder()
-                .username("admin")
-                .password("$2a$12$Ewq7TgaMPbEcduxhxo8VMuS.ptkk7MSNn5m7H75SkpGaPRdoNZ..G")
-                .roles("ADMIN", "USER")
-                .build();
-        return new InMemoryUserDetailsManager(normalUser, adminUser);
+        return userDetailService;
     }
 
+    @Bean
+    AuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setUserDetailsService(userDetailsService());
+        provider.setPasswordEncoder(passwordEncoder());
+        return provider;
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
