@@ -39,6 +39,11 @@ public class ContentController {
         public String handleLogin() {
             return "custom_login";
         }
+
+        @GetMapping("/registration")
+        public String handleRegistration() {
+            return "custom_registration";
+        }
     }
 
     @RestController

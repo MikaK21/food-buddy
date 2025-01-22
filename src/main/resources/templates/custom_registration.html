@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .registration-container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .form-input {
+            margin-bottom: 20px;
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .register-btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            border: none;
+            border-radius: 4px;
+            color: white;
+            cursor: pointer;
+        }
+
+        .register-btn:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+
+<div class="registration-container">
+    <h2>Registration</h2>
+    <form id="registration-form" action="/register/user" method="post">
+        <input id="username" type="text" class="form-input" name="username" placeholder="Username" required>
+        <input id="email" type="email" class="form-input" name="email" placeholder="Email" required>
+        <input id="password" type="password" class="form-input" name="password" placeholder="Password" required>
+        <input id="confirm_password" type="password" class="form-input" name="confirm_password" placeholder="Confirm Password" required>
+        <button type="submit" class="register-btn">Register</button>
+    </form>
+</div>
+
+<script>
+    const registrationForm = document.getElementById('registration-form');
+
+    registrationForm.addEventListener('submit', (event) => {
+        event.preventDefault(); // Prevent the default form submission
+
+        const username = document.getElementById('username').value;
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const confirm_password = document.getElementById('confirm_password').value;
+
+        const data = {
+            username,
+            email,
+            password,
+            confirm_password
+        };
+
+        if (password !== confirm_password) {
+            alert("Passwords do not match.");
+            return;
+        } else {
+            const jsonData = JSON.stringify(data);
+            fetch('/register/user', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: jsonData
+            })
+
+        }
+
+        console.log(data);
+    });
+</script>
+
+</body>
+</html>
