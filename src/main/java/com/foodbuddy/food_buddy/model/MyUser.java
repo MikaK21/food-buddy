@@ -14,6 +14,7 @@ public class MyUser {
     private String username;
     private String password;
     private String role; //Eg: ADMIN,USER
+    private String email;
 
     public Long getId() {
         return id;
@@ -45,5 +46,13 @@ public class MyUser {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

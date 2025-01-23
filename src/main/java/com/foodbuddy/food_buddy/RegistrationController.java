@@ -19,6 +19,9 @@ public class RegistrationController {
 
     @PostMapping("/register/user")
     public MyUser createUser(@RequestBody MyUser user) {
+        if (user.getRole() == null || user.getRole().isEmpty()) {
+            user.setRole("USER");
+        }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return myUserRepository.save(user);
     }
