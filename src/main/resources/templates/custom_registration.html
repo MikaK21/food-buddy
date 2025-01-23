@@ -62,6 +62,27 @@
 </div>
 
 <script>
+    function handleResponse(response) {
+        if (!response.ok) {
+            return response.json().then(errorData => {
+                throw new Error(JSON.stringify(errorData));
+            });
+        }
+        return response.json();
+    }
+
+    function handleError(error) {
+        let errorData;
+        try {
+            errorData = JSON.parse(error.message);
+        } catch (parseError) {
+            console.error('Error parsing error response:', parseError);
+            return;
+        }
+        console.error('Validation errors:', errorData);
+
+    }
+
     const registrationForm = document.getElementById('registration-form');
 
     registrationForm.addEventListener('submit', (event) => {
@@ -91,6 +112,11 @@
                 },
                 body: jsonData
             })
+                .then(handleResponse)
+                .then(data => {
+                    console.log('Success:', data);
+                })
+                .catch(handleError);
 
         }
 
